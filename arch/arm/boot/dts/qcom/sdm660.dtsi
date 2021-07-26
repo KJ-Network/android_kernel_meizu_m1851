@@ -873,8 +873,10 @@
 		compatible = "qcom,bcl";
 		qcom,bcl-enable;
 		qcom,bcl-framework-interface;
+/*
 		qcom,bcl-hotplug-list = <&CPU6 &CPU7>;
 		qcom,bcl-soc-hotplug-list = <&CPU4 &CPU5 &CPU6 &CPU7>;
+*/
 		qcom,ibat-monitor {
 			qcom,low-threshold-uamp = <3400000>;
 			qcom,high-threshold-uamp = <4200000>;
@@ -2691,5 +2693,5 @@
 	status = "ok";
 };
 
-#include "sdm660-mdss.dtsi"
-#include "sdm660-mdss-pll.dtsi"
+#include "sdm630-mdss.dtsi"
+#include "sdm630-mdss-pll.dtsi"

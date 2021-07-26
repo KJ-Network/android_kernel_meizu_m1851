@@ -861,7 +861,7 @@ void __iomem *msm_camera_get_reg_base(struct platform_device *pdev,
 	mem = platform_get_resource_byname(pdev,
 			IORESOURCE_MEM, device_name);
 	if (!mem) {
-		pr_err("err: mem resource %s not found\n", device_name);
+		pr_err("%s err: mem resource %s not found\n", pdev->name, device_name);
 		return NULL;
 	}
 
@@ -904,7 +904,7 @@ uint32_t msm_camera_get_res_size(struct platform_device *pdev,
 	mem = platform_get_resource_byname(pdev,
 		IORESOURCE_MEM, device_name);
 	if (!mem) {
-		pr_err("err: mem resource %s not found\n", device_name);
+		pr_err("%s err: mem resource %s not found\n", pdev->name, device_name);
 		return 0;
 	}
 	return resource_size(mem);

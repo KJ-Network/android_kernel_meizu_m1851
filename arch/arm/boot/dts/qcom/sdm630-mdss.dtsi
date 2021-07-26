@@ -386,6 +386,9 @@
 						00 00 10 0f
 						00 00 10 8f];
 		};
+
+		mdss_dsi1: dummy {
+		};
 	};
 
 	qcom,mdss_wb_panel {

@@ -689,8 +689,8 @@ int msm_camera_config_single_vreg(struct device *dev,
 				*reg_ptr, cam_vreg->min_voltage,
 				cam_vreg->max_voltage);
 			if (rc < 0) {
-				pr_err("%s: %s set voltage failed\n",
-					__func__, vreg_name);
+				pr_err("%s %s: %s set voltage failed\n",
+					dev->of_node->full_name, __func__, vreg_name);
 				goto vreg_set_voltage_fail;
 			}
 			if (cam_vreg->op_mode >= 0) {

@@ -281,7 +281,7 @@ static inline void ipa_broadcast_quota_reach_ind
 {
 }
 
-static int rmnet_ipa_reset_tethering_stats
+static int __maybe_unused rmnet_ipa_reset_tethering_stats
 (
 	struct wan_ioctl_reset_tether_stats *data
 )

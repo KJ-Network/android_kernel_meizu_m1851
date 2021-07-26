@@ -19,6 +19,12 @@
 #include "dsi-panel-sharp-split-link-wuxga-video.dtsi"
 #include "dsi-panel-lgd-incell-sw49106-fhd-video.dtsi"
 #include "dsi-panel-hx8399c-fhd-plus-video.dtsi"
+#include "dsi-panel-nt35597-truly-dualmipi-wqxga-video.dtsi"
+#include "dsi-panel-nt35597-truly-dualmipi-wqxga-cmd.dtsi"
+#include "dsi-panel-sharp-dualmipi-wqxga-video.dtsi"
+#include "dsi-panel-nt35597-truly-dsc-wqxga-video.dtsi"
+#include "dsi-panel-tianma-s6d6ft0-1080p-video.dtsi"
+#include "dsi-panel-nt35597-truly-dsc-wqxga-cmd.dtsi"
 
 &soc {
 	dsi_panel_pwr_supply: dsi_panel_pwr_supply {
