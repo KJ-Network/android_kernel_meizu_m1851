@@ -1,0 +1,22 @@
+
+menuconfig SND_SOC_TAS2560
+	tristate "Texas Instruments TAS2560 SmartAmp(R)"
+	default y
+
+if SND_SOC_TAS2560
+config TAS2560_REGMAP
+    bool "Use of RegMap API"
+    default y
+
+config TAS2560_CODEC
+    bool "Codec Driver support"
+    default y
+
+config TAS2560_MISC
+    bool "Misc Driver support"
+    default y
+
+#config TAS2560_HAPTICS
+#	bool "Haptics Driver"
+
+endif # SND_SOC_TAS2560
