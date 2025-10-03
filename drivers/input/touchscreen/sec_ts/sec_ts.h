@@ -1,4 +1,4 @@
-/* drivers/input/touchscreen/sec_ts.h
+/* drivers/input/touchscreen/sec_ts/sec_ts.h
  *
  * Copyright (C) 2015 Samsung Electronics Co., Ltd.
  * http://www.samsungsemi.com/
