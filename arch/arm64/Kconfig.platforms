@@ -181,5 +181,36 @@ config ARCH_ZYNQMP
 	bool "Xilinx ZynqMP Family"
 	help
 	  This enables support for Xilinx ZynqMP Family
+	  
+config MACH_MEIZU
+	bool "Meizu devices"
+	help
+	  This enables support for Meizu devices.
+
+if MACH_MEIZU
+
+config MACH_MEIZU_SDM660
+	bool
+	select ARCH_QCOM
+	select ARCH_SDM660
+
+choice
+	prompt "Meizu device"
+	default MACH_MEIZU_DUMMY
+
+config MACH_MEIZU_DUMMY
+	bool "Dummy device"
+	help
+	  A stub configuration that doesn't enable support for anything.
+
+config MACH_MEIZU_M1851
+	bool "M1851 board"
+	select MACH_MEIZU_SDM660
+	help
+	  This enables support for Meizu MEIZU E3
+
+endchoice
+
+endif
 
 endmenu
