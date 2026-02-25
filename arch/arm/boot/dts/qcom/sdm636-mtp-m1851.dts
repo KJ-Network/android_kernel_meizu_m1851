@@ -11720,188 +11720,37 @@
 			status = "disabled";
 		};
 
-		spi@c175000 {
+		spi@78b5000 {
 			compatible = "qcom,spi-qup-v2";
 			#address-cells = <0x01>;
 			#size-cells = <0x00>;
 			reg-names = "spi_physical", "spi_bam_physical";
-			reg = <0xc175000 0x600 0xc144000 0x1f000>;
+			reg = <0x78b5000 0x600 0x7884000 0x23000>;
 			interrupt-names = "spi_irq", "spi_bam_irq";
 			interrupts = <0x00 0x5f 0x00 0x00 0xee 0x00>;
-			spi-max-frequency = <0x2faf080>;
-			qcom,use-bam;
-			qcom,ver-reg-exists;
-			qcom,bam-consumer-pipe-index = <0x04>;
-			qcom,bam-producer-pipe-index = <0x05>;
-			qcom,master-id = <0x56>;
-			qcom,use-pinctrl;
-			pinctrl-names = "spi_default", "spi_sleep";
-			pinctrl-0 = <0x197>;
-			pinctrl-1 = <0x198>;
-			clock-names = "iface_clk", "core_clk";
-			clocks = <0xa0 0x23 0xa0 0x25>;
-			status = "disabled";
-		};
-
-		spi@c176000 {
-			compatible = "qcom,spi-qup-v2";
-			#address-cells = <0x01>;
-			#size-cells = <0x00>;
-			reg-names = "spi_physical", "spi_bam_physical";
-			reg = <0xc176000 0x600 0xc144000 0x1f000>;
-			interrupt-names = "spi_irq", "spi_bam_irq";
-			interrupts = <0x00 0x60 0x00 0x00 0xee 0x00>;
-			spi-max-frequency = <0x2faf080>;
-			qcom,use-bam;
-			qcom,ver-reg-exists;
-			qcom,bam-consumer-pipe-index = <0x06>;
-			qcom,bam-producer-pipe-index = <0x07>;
-			qcom,master-id = <0x56>;
-			qcom,use-pinctrl;
-			pinctrl-names = "spi_default", "spi_sleep";
-			pinctrl-0 = <0x199>;
-			pinctrl-1 = <0x19a>;
-			clock-names = "iface_clk", "core_clk";
-			clocks = <0xa0 0x23 0xa0 0x27>;
-			status = "disabled";
-		};
-
-		spi@c177000 {
-			compatible = "qcom,spi-qup-v2";
-			#address-cells = <0x01>;
-			#size-cells = <0x00>;
-			reg-names = "spi_physical", "spi_bam_physical";
-			reg = <0xc177000 0x600 0xc144000 0x1f000>;
-			interrupt-names = "spi_irq", "spi_bam_irq";
-			interrupts = <0x00 0x61 0x00 0x00 0xee 0x00>;
-			spi-max-frequency = <0x2faf080>;
+			spi-max-frequency = <0x124f800>;
+			qcom,infinite-mode = <0x00>;
 			qcom,use-bam;
 			qcom,ver-reg-exists;
 			qcom,bam-consumer-pipe-index = <0x08>;
 			qcom,bam-producer-pipe-index = <0x09>;
 			qcom,master-id = <0x56>;
 			qcom,use-pinctrl;
-			pinctrl-names = "spi_default", "spi_sleep";
-			pinctrl-0 = <0x19b>;
-			pinctrl-1 = <0x19c>;
 			clock-names = "iface_clk", "core_clk";
-			clocks = <0xa0 0x23 0xa0 0x29>;
-			status = "disabled";
-		};
+			clocks = <0x11 0x8caa5b4f 0x11 0x759a76b0>;
+			status = "ok";
 
-		spi@c178000 {
-			compatible = "qcom,spi-qup-v2";
-			#address-cells = <0x01>;
-			#size-cells = <0x00>;
-			reg-names = "spi_physical", "spi_bam_physical";
-			reg = <0xc178000 0x600 0xc144000 0x1f000>;
-			interrupt-names = "spi_irq", "spi_bam_irq";
-			interrupts = <0x00 0x62 0x00 0x00 0xee 0x00>;
-			spi-max-frequency = <0x2faf080>;
-			qcom,use-bam;
-			qcom,ver-reg-exists;
-			qcom,bam-consumer-pipe-index = <0x0a>;
-			qcom,bam-producer-pipe-index = <0x0b>;
-			qcom,master-id = <0x56>;
-			qcom,use-pinctrl;
-			pinctrl-names = "spi_default", "spi_sleep";
-			pinctrl-0 = <0x19d>;
-			pinctrl-1 = <0x19e>;
-			clock-names = "iface_clk", "core_clk";
-			clocks = <0xa0 0x23 0xa0 0x2b>;
-			status = "disabled";
-		};
-
-		spi@c1b5000 {
-			compatible = "qcom,spi-qup-v2";
-			#address-cells = <0x01>;
-			#size-cells = <0x00>;
-			reg-names = "spi_physical", "spi_bam_physical";
-			reg = <0xc1b5000 0x600 0xc184000 0x1f000>;
-			interrupt-names = "spi_irq", "spi_bam_irq";
-			interrupts = <0x00 0x65 0x00 0x00 0xef 0x00>;
-			spi-max-frequency = <0x2faf080>;
-			qcom,use-bam;
-			qcom,ver-reg-exists;
-			qcom,bam-consumer-pipe-index = <0x04>;
-			qcom,bam-producer-pipe-index = <0x05>;
-			qcom,master-id = <0x54>;
-			qcom,use-pinctrl;
-			pinctrl-names = "spi_default", "spi_sleep";
-			pinctrl-0 = <0x19f>;
-			pinctrl-1 = <0x1a0>;
-			clock-names = "iface_clk", "core_clk";
-			clocks = <0xa0 0x2e 0xa0 0x30>;
-			status = "disabled";
-		};
-
-		spi@c1b6000 {
-			compatible = "qcom,spi-qup-v2";
-			#address-cells = <0x01>;
-			#size-cells = <0x00>;
-			reg-names = "spi_physical", "spi_bam_physical";
-			reg = <0xc1b6000 0x600 0xc184000 0x1f000>;
-			interrupt-names = "spi_irq", "spi_bam_irq";
-			interrupts = <0x00 0x66 0x00 0x00 0xef 0x00>;
-			spi-max-frequency = <0x2faf080>;
-			qcom,use-bam;
-			qcom,ver-reg-exists;
-			qcom,bam-consumer-pipe-index = <0x06>;
-			qcom,bam-producer-pipe-index = <0x07>;
-			qcom,master-id = <0x54>;
-			qcom,use-pinctrl;
-			pinctrl-names = "spi_default", "spi_sleep";
-			pinctrl-0 = <0x1a1>;
-			pinctrl-1 = <0x1a2>;
-			clock-names = "iface_clk", "core_clk";
-			clocks = <0xa0 0x2e 0xa0 0x32>;
-			status = "disabled";
-		};
-
-		spi@c1b7000 {
-			compatible = "qcom,spi-qup-v2";
-			#address-cells = <0x01>;
-			#size-cells = <0x00>;
-			reg-names = "spi_physical", "spi_bam_physical";
-			reg = <0xc1b7000 0x600 0xc184000 0x1f000>;
-			interrupt-names = "spi_irq", "spi_bam_irq";
-			interrupts = <0x00 0x67 0x00 0x00 0xef 0x00>;
-			spi-max-frequency = <0x2faf080>;
-			qcom,use-bam;
-			qcom,ver-reg-exists;
-			qcom,bam-consumer-pipe-index = <0x08>;
-			qcom,bam-producer-pipe-index = <0x09>;
-			qcom,master-id = <0x54>;
-			qcom,use-pinctrl;
-			pinctrl-names = "spi_default", "spi_sleep";
-			pinctrl-0 = <0x1a3>;
-			pinctrl-1 = <0x1a4>;
-			clock-names = "iface_clk", "core_clk";
-			clocks = <0xa0 0x2e 0xa0 0x34>;
-			status = "disabled";
-		};
-
-		spi@c1b8000 {
-			compatible = "qcom,spi-qup-v2";
-			#address-cells = <0x01>;
-			#size-cells = <0x00>;
-			reg-names = "spi_physical", "spi_bam_physical";
-			reg = <0xc1b8000 0x600 0xc184000 0x1f000>;
-			interrupt-names = "spi_irq", "spi_bam_irq";
-			interrupts = <0x00 0x68 0x00 0x00 0xef 0x00>;
-			spi-max-frequency = <0x2faf080>;
-			qcom,use-bam;
-			qcom,ver-reg-exists;
-			qcom,bam-consumer-pipe-index = <0x0a>;
-			qcom,bam-producer-pipe-index = <0x0b>;
-			qcom,master-id = <0x54>;
-			qcom,use-pinctrl;
-			pinctrl-names = "spi_default", "spi_sleep";
-			pinctrl-0 = <0x1a5>;
-			pinctrl-1 = <0x1a6>;
-			clock-names = "iface_clk", "core_clk";
-			clocks = <0xa0 0x2e 0xa0 0x36>;
-			status = "disabled";
+			goodix_fp@0 {
+				compatible = "goodix,fingerprint";
+				status = "ok";
+				reg = <0x00>;
+				interrupt-parent = <0xc5>;
+				interrupts = <0x30 0x01>;
+				goodix,gpio_irq = <0xc5 0x30 0x00>;
+				goodix,gpio_reset = <0xc5 0x8c 0x00>;
+				goodix,gpio_pwr = <0xc5 0x86 0x00>;
+				spi-max-frequency = <0x7a1200>;
+			};
 		};
 
 		uart@c16f000 {
@@ -15965,14 +15814,7 @@
 		serial0 = "/soc/serial@0c170000";
 		sdhc1 = "/soc/sdhci@c0c4000";
 		sdhc2 = "/soc/sdhci@c084000";
-		spi1 = "/soc/spi@c175000";
-		spi2 = "/soc/spi@c176000";
-		spi3 = "/soc/spi@c177000";
-		spi4 = "/soc/spi@c178000";
-		spi5 = "/soc/spi@c1b5000";
-		spi6 = "/soc/spi@c1b6000";
-		spi7 = "/soc/spi@c1b7000";
-		spi8 = "/soc/spi@c1b8000";
+		spi1 = "/soc/spi@78b5000";
 		i2c1 = "/soc/i2c@c175000";
 		i2c2 = "/soc/i2c@c176000";
 		i2c3 = "/soc/i2c@c177000";
