@@ -3521,15 +3521,6 @@
 			pinctrl-0 = <0xa1>;
 		};
 
-		qcom,qbt1000 {
-			compatible = "qcom,qbt1000";
-			clock-names = "core", "iface";
-			clocks = <0xa0 0x29 0xa0 0x23>;
-			clock-frequency = <0xe4e1c0>;
-			qcom,ipc-gpio = <0x80 0x48 0x00>;
-			qcom,finger-detect-gpio = <0xa2 0x0b 0x00>;
-		};
-
 		qcom,sensor-information {
 			compatible = "qcom,sensor-information";
 
