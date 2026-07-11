@@ -466,3 +466,26 @@ config ARCH_ZYNQMP
 	  This enables support for Xilinx ZynqMP Family
 
 endmenu
+
+config MACH_MEIZU
+	bool "Meizu device"
+	depends on ARCH_QCOM
+	help
+	  Support for Meizu products
+
+config MACH_MEIZU_SDM660
+	bool "Meizu SDM660"
+	depends on ARCH_QCOM
+	select MACH_MEIZU
+	help
+	  Support for MEIZU SDM660 devices
+
+menu "Meizu board selection"
+
+	config MACH_MEIZU_M1851
+		bool "Meizu m1851 board"
+		select MACH_MEIZU_SDM660
+		help
+		  Support for Meizu E3
+
+endmenu
