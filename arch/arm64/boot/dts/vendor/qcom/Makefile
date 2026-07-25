@@ -275,6 +275,73 @@ dtb-$(CONFIG_ARCH_KHAJE) += khaje-idp.dtb \
 endif
 
 ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
+
+dtbo-$(CONFIG_ARCH_SDM439) += sdm439-mtp-overlay.dtbo \
+        sdm439-cdp-overlay.dtbo \
+        sdm439-qrd-overlay.dtbo \
+        sdm439-external-codec-mtp-overlay.dtbo \
+        sdm439-rcm-overlay.dtbo
+
+dtbo-$(CONFIG_ARCH_SDM429) += sdm429-mtp-overlay.dtbo \
+	sdm429-cdp-overlay.dtbo \
+	sdm429-qrd-overlay.dtbo
+
+dtbo-$(CONFIG_ARCH_QM215) +=qm215-qrd-overlay.dtbo \
+	qcm2150-qrd-overlay.dtbo \
+	qm215-qrd-smb1360-overlay.dtbo
+
+sdm439-mtp-overlay.dtbo-base := sdm439.dtb \
+	sda439.dtb \
+	msm8937-interposer-sdm439.dtb
+
+sdm439-cdp-overlay.dtbo-base := sdm439.dtb \
+        sda439.dtb \
+        msm8937-interposer-sdm439.dtb
+
+sdm439-qrd-overlay.dtbo-base := sdm439.dtb \
+        msm8937-interposer-sdm439.dtb
+
+sdm439-external-codec-mtp-overlay.dtbo-base := sdm439.dtb
+sdm439-rcm-overlay.dtbo-base := sdm439.dtb
+
+
+sdm429-mtp-overlay.dtbo-base := sdm429.dtb \
+	sda429.dtb \
+	msm8937-interposer-sdm429.dtb
+
+sdm429-cdp-overlay.dtbo-base := sdm429.dtb \
+	sda429.dtb \
+	msm8937-interposer-sdm429.dtb
+
+sdm429-qrd-overlay.dtbo-base := sdm429.dtb \
+	msm8937-interposer-sdm429.dtb
+
+qm215-qrd-overlay.dtbo-base := qm215.dtb
+qcm2150-qrd-overlay.dtbo-base := qcm2150.dtb
+qm215-qrd-smb1360-overlay.dtbo-base := qm215.dtb
+else
+dtb-$(CONFIG_ARCH_SDM439) += sdm439-mtp.dtb \
+	sdm439-cdp.dtb \
+	sdm439-qrd.dtb \
+	sda439-mtp.dtb \
+	sda439-cdp.dtb \
+	sdm439-external-codec-mtp.dtb \
+	sdm439-rcm.dtb
+dtb-$(CONFIG_ARCH_QM215) += qm215-qrd.dtb \
+	qcm2150-qrd.dtb \
+	qm215-qrd-smb1360.dtb
+
+dtb-$(CONFIG_ARCH_SDM429) += sdm429-mtp.dtb \
+	sdm429-cdp.dtb \
+	sdm429-qrd.dtb \
+	sda429-mtp.dtb \
+	sda429-cdp.dtb
+endif
+
+ifeq ($(CONFIG_MACH_MEIZU_SDM660),y)
+dtb-$(CONFIG_MACH_MEIZU_M1851) := sdm636-mtp-m1851.dtb
+else
+ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
         dtbo-$(CONFIG_ARCH_SDM660) += \
                 sdm660-mtp-external-codec-overlay.dtbo \
                 sdm660-mtp-internal-codec-overlay.dtbo \
@@ -358,70 +425,6 @@ sdm660-internal-codec-cdp.dtb \
         sdm636-usbc-audio-rcm.dtb
 endif
 
-ifeq ($(CONFIG_BUILD_ARM64_DT_OVERLAY),y)
-
-dtbo-$(CONFIG_ARCH_SDM439) += sdm439-mtp-overlay.dtbo \
-        sdm439-cdp-overlay.dtbo \
-        sdm439-qrd-overlay.dtbo \
-        sdm439-external-codec-mtp-overlay.dtbo \
-        sdm439-rcm-overlay.dtbo
-
-dtbo-$(CONFIG_ARCH_SDM429) += sdm429-mtp-overlay.dtbo \
-	sdm429-cdp-overlay.dtbo \
-	sdm429-qrd-overlay.dtbo
-
-dtbo-$(CONFIG_ARCH_QM215) +=qm215-qrd-overlay.dtbo \
-	qcm2150-qrd-overlay.dtbo \
-	qm215-qrd-smb1360-overlay.dtbo
-
-sdm439-mtp-overlay.dtbo-base := sdm439.dtb \
-	sda439.dtb \
-	msm8937-interposer-sdm439.dtb
-
-sdm439-cdp-overlay.dtbo-base := sdm439.dtb \
-        sda439.dtb \
-        msm8937-interposer-sdm439.dtb
-
-sdm439-qrd-overlay.dtbo-base := sdm439.dtb \
-        msm8937-interposer-sdm439.dtb
-
-sdm439-external-codec-mtp-overlay.dtbo-base := sdm439.dtb
-sdm439-rcm-overlay.dtbo-base := sdm439.dtb
-
-
-sdm429-mtp-overlay.dtbo-base := sdm429.dtb \
-	sda429.dtb \
-	msm8937-interposer-sdm429.dtb
-
-sdm429-cdp-overlay.dtbo-base := sdm429.dtb \
-	sda429.dtb \
-	msm8937-interposer-sdm429.dtb
-
-sdm429-qrd-overlay.dtbo-base := sdm429.dtb \
-	msm8937-interposer-sdm429.dtb
-
-qm215-qrd-overlay.dtbo-base := qm215.dtb
-qcm2150-qrd-overlay.dtbo-base := qcm2150.dtb
-qm215-qrd-smb1360-overlay.dtbo-base := qm215.dtb
-else
-dtb-$(CONFIG_ARCH_SDM439) += sdm439-mtp.dtb \
-	sdm439-cdp.dtb \
-	sdm439-qrd.dtb \
-	sda439-mtp.dtb \
-	sda439-cdp.dtb \
-	sdm439-external-codec-mtp.dtb \
-	sdm439-rcm.dtb
-dtb-$(CONFIG_ARCH_QM215) += qm215-qrd.dtb \
-	qcm2150-qrd.dtb \
-	qm215-qrd-smb1360.dtb
-
-dtb-$(CONFIG_ARCH_SDM429) += sdm429-mtp.dtb \
-	sdm429-cdp.dtb \
-	sdm429-qrd.dtb \
-	sda429-mtp.dtb \
-	sda429-cdp.dtb
-endif
-
 ifeq ($(CONFIG_ARCH_SDM630),y)
 dtb-$(CONFIG_ARCH_SDM630) += sdm630-cdp.dtb \
 sdm630-mtp.dtb \
@@ -449,6 +452,7 @@ sdm630-mtp.dtb \
         sda630-pm660a-mtp.dtb \
         sda630-pm660a-rcm.dtb \
         sda630-pm660a-qrd-hdk.dtb
+endif
 endif
 
 always		:= $(dtb-y)
