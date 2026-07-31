@@ -15915,6 +15915,13 @@
 		qcom,msm-ssc-sensors {
 			compatible = "qcom,msm-ssc-sensors";
 		};
+		
+		ramoops {
+			compatible = "ramoops";
+			memory-region = <0x297>;
+			console-size = <0x00 0x200000>;
+			pmsg-size = <0x00 0x200000>;
+		};
 
 		cam_dovdd_fixed_regulator {
 			compatible = "regulator-fixed";
@@ -16164,24 +16171,20 @@
 			reg = <0x00 0x94a00000 0x00 0x100000>;
 		};
 
-		pstore_reserve_mem_region@ffe00000 {
-			linux,reserve-contiguous-region;
-			linux,reserve-region;
-			linux,removed-completely;
-			reg = <0x00 0xffe00000 0x00 0x100000>;
-			label = "pstore_reserve_mem";
-			console-size = <0x50000>;
-			no-map;
-			linux,phandle = <0x290>;
-			phandle = <0x290>;
-		};
-
 		reset_reason_mem@ffd00000 {
 			compatible = "reset_reason";
 			linux,reserve-contiguous-region;
 			linux,reserve-region;
 			linux,removed-completely;
 			reg = <0x00 0xffd00000 0x00 0x100000>;
+		};
+		
+		ramoops_region@b0000000 {
+			compatible = "removed-dma-pool";
+			no-map;
+			reg = <0x00 0xa0000000 0x00 0x400000>;
+			linux,phandle = <0x297>;
+			phandle = <0x297>;
 		};
 	};
 
@@ -16251,11 +16254,5 @@
 			qcom,gui-version = "PMI8998GUI - 2.0.0.54";
 			qcom,fg-profile-data = <0xa41f6e05 0x9c0a2bfc 0x321d23e5 0x600b1b15 0xad178c22 0xea3c894a 0x5b000000 0x12000000 0x62c2 0xccdd8c2 0x19000800 0x85eac7ec 0xe2052f01 0x9bf51212 0x5e05883b 0x22060920 0x27001400 0x7d1fdd05 0x3f0ae5fc 0x721de3f5 0x6f12c01d 0x8818fb22 0x8d45c652 0x54000000 0xf000000 0xbdcd 0x55c25dc5 0x14000000 0x7e00c7ec 0x6006bb00 0x59066103 0xd9fc751b 0xb333ccff 0x7100000 0x3e0b9945 0x14004000 0xae010afa 0xff000000 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00 0x00>;
 		};
-	};
-
-	reserved-driver@0 {
-		compatible = "ramoops";
-		memory-region = <0x290>;
-		console-size = <0x00 0x2000>;
 	};
 };
