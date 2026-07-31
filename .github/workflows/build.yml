@@ -1,7 +1,7 @@
 name: Build Kernel M1851
 on:
-  workflow_call:
   workflow_dispatch:
+  push:
 
 jobs:
   build:
