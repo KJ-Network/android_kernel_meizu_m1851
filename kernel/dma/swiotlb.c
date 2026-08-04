@@ -111,8 +111,11 @@ setup_io_tlb_npages(char *str)
 {
 	if (isdigit(*str)) {
 		io_tlb_nslabs = simple_strtoul(str, &str, 0);
-		/* avoid tail segment of size < IO_TLB_SEGSIZE */
-		io_tlb_nslabs = ALIGN(io_tlb_nslabs, IO_TLB_SEGSIZE);
+		if (io_tlb_nslabs < IO_TLB_MIN_SLABS)
+			io_tlb_nslabs = 0;
+		else
+			/* avoid tail segment of size < IO_TLB_SEGSIZE */
+			io_tlb_nslabs = ALIGN(io_tlb_nslabs, IO_TLB_SEGSIZE);
 	}
 	if (*str == ',')
 		++str;
