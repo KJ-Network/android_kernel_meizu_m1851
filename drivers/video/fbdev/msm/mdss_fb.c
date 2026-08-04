@@ -37,6 +37,7 @@
 #include <linux/vmalloc.h>
 #include <linux/file.h>
 #include <linux/kthread.h>
+#include <linux/m1851_boot_timeout.h>
 #include <linux/sched.h>
 #include <uapi/linux/sched/types.h>
 #include "mdss_fb.h"
@@ -3187,6 +3188,9 @@ static int __mdss_fb_sync_buf_done_callback(struct notifier_block *p,
 		break;
 	case MDP_NOTIFY_FRAME_DONE:
 		pr_debug("%s: frame done\n", sync_pt_data->fence_name);
+		/* Only a completed userspace commit counts as the second screen. */
+		if (mfd->index == 0 && atomic_read(&mfd->commits_pending))
+			m1851_boot_timeout_disarm();
 		mdss_fb_signal_timeline(sync_pt_data);
 		mdss_fb_calc_fps(mfd);
 		break;
