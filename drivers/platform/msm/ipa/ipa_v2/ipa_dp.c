@@ -1844,7 +1844,6 @@ static void ipa_wq_repl_rx(struct work_struct *work)
 	sys = container_of(work, struct ipa_sys_context, repl_work);
 	curr = atomic_read(&sys->repl.tail_idx);
 
-begin:
 	while (1) {
 		next = (curr + 1) % sys->repl.capacity;
 		if (next == atomic_read(&sys->repl.head_idx))
@@ -1904,7 +1903,6 @@ fail_kmem_cache_alloc:
 			WARN_ON(1);
 		pr_err_ratelimited("%s sys=%p repl ring empty\n",
 				__func__, sys);
-		goto begin;
 	}
 }
 
