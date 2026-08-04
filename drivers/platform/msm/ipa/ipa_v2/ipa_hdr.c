@@ -168,7 +168,7 @@ int __ipa_commit_hdr_v1_1(void)
 	struct ipa_mem_buffer *mem;
 	struct ipa_hdr_init_local *cmd;
 	u16 len;
-	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	mem = kmalloc(sizeof(struct ipa_mem_buffer), GFP_KERNEL);
 	if (!mem) {
@@ -261,7 +261,7 @@ int __ipa_commit_hdr_v2(void)
 	struct ipa_mem_buffer mem;
 	struct ipa_hdr_init_system *cmd = NULL;
 	struct ipa_hw_imm_cmd_dma_shared_mem *dma_cmd = NULL;
-	gfp_t flag = GFP_ATOMIC | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_ATOMIC | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 	int rc = -EFAULT;
 
 	if (ipa_generate_hdr_hw_tbl(&mem)) {
@@ -353,7 +353,7 @@ int __ipa_commit_hdr_v2_5(void)
 	struct ipa_hw_imm_cmd_dma_shared_mem *dma_cmd_hdr = NULL;
 	struct ipa_hw_imm_cmd_dma_shared_mem *dma_cmd_ctx = NULL;
 	struct ipa_register_write *reg_write_cmd = NULL;
-	gfp_t flag = GFP_ATOMIC | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_ATOMIC | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 	int rc = -EFAULT;
 	u32 proc_ctx_size;
 	u32 proc_ctx_ofst;
@@ -667,7 +667,7 @@ static int __ipa_add_hdr(struct ipa_hdr_add *hdr, bool user)
 	struct ipa_hdr_tbl *htbl = &ipa_ctx->hdr_tbl;
 	int id;
 	int mem_size;
-	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	if (hdr->hdr_len == 0 || hdr->hdr_len > IPA_HDR_MAX_SIZE) {
 		IPAERR_RL("bad parm\n");

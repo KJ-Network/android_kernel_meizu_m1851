@@ -556,7 +556,7 @@ int __ipa_commit_rt_v1_1(enum ipa_ip_type ip)
 	struct ipa_ip_v6_routing_init *v6;
 	u16 avail;
 	u16 size;
-	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	mem = kmalloc(sizeof(struct ipa_mem_buffer), GFP_KERNEL);
 	if (!mem) {
@@ -729,7 +729,7 @@ int __ipa_commit_rt_v2(enum ipa_ip_type ip)
 	struct ipa_mem_buffer head;
 	struct ipa_hw_imm_cmd_dma_shared_mem *cmd1 = NULL;
 	struct ipa_hw_imm_cmd_dma_shared_mem *cmd2 = NULL;
-	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 	u16 avail;
 	u32 num_modem_rt_index;
 	int rc = 0;

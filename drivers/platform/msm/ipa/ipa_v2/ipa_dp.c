@@ -423,7 +423,7 @@ int ipa_send(struct ipa_sys_context *sys, u32 num_desc, struct ipa_desc *desc,
 	if (unlikely(!in_atomic))
 		mem_flag = GFP_KERNEL;
 
-	flag = mem_flag | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	flag = mem_flag | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	if (num_desc == IPA_NUM_DESC_PER_SW_TX) {
 		transfer.iovec = dma_pool_alloc(ipa_ctx->dma_pool, mem_flag,
@@ -1647,7 +1647,7 @@ int ipa2_tx_dp(enum ipa_client_type dst, struct sk_buff *skb,
 	struct ipa_sys_context *sys;
 	int src_ep_idx;
 	int num_frags, f;
-	gfp_t flag = GFP_ATOMIC | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_ATOMIC | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	if (unlikely(!ipa_ctx)) {
 		IPAERR("IPA driver was not initialized\n");
@@ -1837,7 +1837,7 @@ static void ipa_wq_repl_rx(struct work_struct *work)
 	struct ipa_sys_context *sys;
 	void *ptr;
 	struct ipa_rx_pkt_wrapper *rx_pkt;
-	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 	u32 next;
 	u32 curr;
 
@@ -2004,7 +2004,7 @@ static void ipa_alloc_wlan_rx_common_cache(u32 size)
 	struct ipa_rx_pkt_wrapper *rx_pkt;
 	int rx_len_cached = 0;
 	gfp_t flag = GFP_NOWAIT | __GFP_NOWARN |
-		(ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+		(ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	rx_len_cached = ipa_ctx->wc_memb.wlan_comm_total_cnt;
 	while (rx_len_cached < size) {
@@ -2077,7 +2077,7 @@ static void ipa_replenish_rx_cache(struct ipa_sys_context *sys)
 	int ret;
 	int rx_len_cached = 0;
 	gfp_t flag = GFP_NOWAIT | __GFP_NOWARN |
-		(ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+		(ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	rx_len_cached = sys->len;
 
@@ -2946,7 +2946,7 @@ void ipa2_recycle_wan_skb(struct sk_buff *skb)
 	int ep_idx = ipa2_get_ep_mapping(
 	   IPA_CLIENT_APPS_WAN_CONS);
 	gfp_t flag = GFP_NOWAIT | __GFP_NOWARN |
-		(ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+		(ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	if (unlikely(ep_idx == -1)) {
 		IPAERR("dest EP does not exist\n");

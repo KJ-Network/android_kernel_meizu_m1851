@@ -331,7 +331,7 @@ int ipa2_nat_init_cmd(struct ipa_ioc_v4_nat_init *init)
 	int result;
 	u32 offset = 0;
 	size_t tmp;
-	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	mutex_lock(&ipa_ctx->nat_mem.lock);
 
@@ -598,7 +598,7 @@ int ipa2_nat_dma_cmd(struct ipa_ioc_nat_dma_cmd *dma)
 	struct ipa_desc *desc = NULL;
 	u16 size = 0, cnt = 0;
 	int ret = 0;
-	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	if (!ipa_ctx->nat_mem.is_dev_init) {
 		IPAERR_RL("Nat table not initialized\n");
@@ -786,7 +786,7 @@ int ipa2_nat_del_cmd(struct ipa_ioc_v4_nat_del *del)
 	u8 mem_type = IPA_NAT_SHARED_MEMORY;
 	u32 base_addr = IPA_NAT_PHYS_MEM_OFFSET;
 	int result;
-	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	if (!ipa_ctx->nat_mem.is_dev_init) {
 		IPAERR_RL("Nat table not initialized\n");

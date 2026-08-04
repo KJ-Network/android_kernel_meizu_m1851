@@ -644,7 +644,7 @@ int __ipa_commit_flt_v1_1(enum ipa_ip_type ip)
 	struct ipa_ip_v6_filter_init *v6;
 	u16 avail;
 	u16 size;
-	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_KERNEL | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	mem = kmalloc(sizeof(struct ipa_mem_buffer), GFP_KERNEL);
 	if (!mem) {
@@ -833,7 +833,7 @@ int __ipa_commit_flt_v2(enum ipa_ip_type ip)
 	int num_desc = 0;
 	int i;
 	u16 avail;
-	gfp_t flag = GFP_ATOMIC | (ipa_ctx->use_dma_zone ? GFP_DMA : 0);
+	gfp_t flag = GFP_ATOMIC | (ipa_ctx->use_dma_zone ? GFP_DMA32 : 0);
 
 	desc = kzalloc(16 * sizeof(*desc), GFP_ATOMIC);
 	if (desc == NULL) {
