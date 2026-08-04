@@ -21,6 +21,7 @@
 #include <linux/clockchips.h>
 #include <linux/export.h>
 #include <linux/kernel.h>
+#include <linux/m1851_boot_timeout.h>
 #include <linux/interrupt.h>
 #include <linux/time.h>
 #include <linux/init.h>
@@ -79,4 +80,6 @@ void __init time_init(void)
 
 	/* Calibrate the delay loop directly */
 	lpj_fine = arch_timer_rate / HZ;
+
+	m1851_boot_timeout_init_timer();
 }

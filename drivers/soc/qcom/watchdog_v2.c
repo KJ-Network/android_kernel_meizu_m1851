@@ -5,6 +5,7 @@
 
 #include <linux/module.h>
 #include <linux/kernel.h>
+#include <linux/m1851_boot_timeout.h>
 #include <linux/io.h>
 #include <linux/delay.h>
 #include <linux/sort.h>
@@ -1076,6 +1077,12 @@ static struct platform_driver msm_watchdog_driver = {
 
 static int init_watchdog(void)
 {
+	/* The m1851 debug timeout owns this watchdog as a reset fallback. */
+	if (m1851_boot_timeout_owns_watchdog()) {
+		pr_info("MSM watchdog reserved by m1851 boot timeout\n");
+		return 0;
+	}
+
 	return platform_driver_register(&msm_watchdog_driver);
 }
 

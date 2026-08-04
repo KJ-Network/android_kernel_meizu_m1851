@@ -488,4 +488,21 @@ menu "Meizu board selection"
 		help
 		  Support for Meizu E3
 
+	config M1851_BOOT_TIMEOUT
+		bool "Reboot Meizu m1851 if the first frame times out"
+		depends on MACH_MEIZU_M1851 && PSTORE_RAM=y && PSTORE_CONSOLE
+		help
+		  Mirror printk into the m1851 console-ramoops memory before the
+		  flattened device tree is scanned. Once hrtimers are available, pet
+		  the limited-width APSS watchdog while enforcing a two-minute boot
+		  deadline. If the primary display does not complete a frame by that
+		  deadline, take the warm restart path.
+
+		  If boot stalls before timer interrupts work, the APSS watchdog resets
+		  the device at its hardware maximum of about 32 seconds. The early
+		  persistent console makes the log survive that fallback as well.
+		  This option reserves the watchdog from the normal QCOM driver.
+
+		  This is intended only for debugging early boot failures.
+
 endmenu

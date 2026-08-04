@@ -37,6 +37,7 @@
 #include <linux/fs.h>
 #include <linux/proc_fs.h>
 #include <linux/memblock.h>
+#include <linux/m1851_boot_timeout.h>
 #include <linux/of_fdt.h>
 #include <linux/efi.h>
 #include <linux/psci.h>
@@ -307,6 +308,7 @@ void __init setup_arch(char **cmdline_p)
 
 	early_fixmap_init();
 	early_ioremap_init();
+	m1851_boot_timeout_start();
 
 	setup_machine_fdt(__fdt_pointer);
 
