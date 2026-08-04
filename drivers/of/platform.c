@@ -397,6 +397,8 @@ static int of_platform_bus_create(struct device_node *bus,
 		return 0;
 	}
 
+	if (IS_ENABLED(CONFIG_M1851_BOOT_TIMEOUT))
+		pr_info("m1851 populate: creating %pOF\n", bus);
 	dev = of_platform_device_create_pdata(bus, bus_id, platform_data, parent);
 	if (!dev || !of_match_node(matches, bus))
 		return 0;

@@ -7,6 +7,7 @@
 
 #include <linux/atomic.h>
 #include <linux/console.h>
+#include <linux/err.h>
 #include <linux/export.h>
 #include <linux/hrtimer.h>
 #include <linux/init.h>
@@ -14,8 +15,12 @@
 #include <linux/kernel.h>
 #include <linux/math64.h>
 #include <linux/m1851_boot_timeout.h>
+#include <linux/pstore_ram.h>
 #include <linux/reboot.h>
+#include <linux/sched.h>
+#include <linux/sched/debug.h>
 #include <linux/sizes.h>
+#include <linux/smp.h>
 
 #define M1851_BOOT_TIMEOUT_SECONDS	120U
 #define M1851_BOOT_HEARTBEAT_SECONDS	20U
@@ -29,9 +34,10 @@
 #define M1851_WDT_BARK_TIME		0x10
 #define M1851_WDT_BITE_TIME		0x14
 
-/* The first 256 KiB is a valid prefix of the 2 MiB console-ramoops zone. */
+/* The first 2 MiB matches the console zone consumed by the 4.4 kernel. */
 #define M1851_RAMOOPS_CONSOLE_PHYS	0xa0000000
 #define M1851_EARLY_RAMOOPS_SIZE		SZ_256K
+#define M1851_RAMOOPS_CONSOLE_SIZE	SZ_2M
 #define M1851_PERSISTENT_RAM_SIG		0x43474244
 struct m1851_persistent_ram_buffer {
 	u32 sig;
@@ -53,9 +59,11 @@ static atomic_t m1851_boot_timeout_state =
 static struct hrtimer m1851_boot_timeout_timer;
 static void __iomem *m1851_boot_timeout_wdt_base;
 static struct m1851_persistent_ram_buffer __iomem *m1851_early_ramoops;
+static struct persistent_ram_zone *m1851_console_prz;
 static u64 m1851_boot_timeout_counter;
 static u64 m1851_boot_timeout_frequency;
 static bool m1851_early_console_registered;
+static bool m1851_boot_backtrace_dumped;
 
 static u64 m1851_boot_timeout_read_counter(void)
 {
@@ -98,7 +106,14 @@ static void m1851_early_console_write(struct console *console,
 	const u32 capacity = M1851_EARLY_RAMOOPS_SIZE - sizeof(*buffer);
 	u32 start, size, first;
 
-	buffer = m1851_early_ramoops;
+	if (m1851_console_prz) {
+		persistent_ram_write(m1851_console_prz, text, count);
+		/* Make the write visible before a watchdog reset. */
+		wmb();
+		return;
+	}
+
+	buffer = READ_ONCE(m1851_early_ramoops);
 	if (!buffer || !count)
 		return;
 
@@ -156,8 +171,52 @@ static void __init m1851_early_console_init(void)
 
 	register_console(&m1851_early_console);
 	m1851_early_console_registered = true;
+	console_verbose();
+	initcall_debug = true;
 	pr_emerg("early persistent console active at phys 0x%llx\n",
 		 (unsigned long long)M1851_RAMOOPS_CONSOLE_PHYS);
+}
+
+static void __init m1851_early_console_expand(void)
+{
+	struct persistent_ram_ecc_info ecc_info = { };
+	struct m1851_persistent_ram_buffer __iomem *early;
+	struct persistent_ram_zone *prz;
+
+	if (!m1851_early_console_registered || m1851_console_prz)
+		return;
+
+	/*
+	 * early_ioremap is limited to 256 KiB. Once vmap is available, replace
+	 * that temporary mapping with the normal persistent-ram implementation
+	 * so all 2 MiB expected by the 4.4 reader can be used.
+	 */
+	early = m1851_early_ramoops;
+	WRITE_ONCE(m1851_early_ramoops, NULL);
+	/* Stop console writes before removing the temporary mapping. */
+	wmb();
+	early_iounmap(early, M1851_EARLY_RAMOOPS_SIZE);
+
+	prz = persistent_ram_new(M1851_RAMOOPS_CONSOLE_PHYS,
+				 M1851_RAMOOPS_CONSOLE_SIZE, 0, &ecc_info, 0, 0);
+	if (IS_ERR(prz)) {
+		m1851_early_ramoops = early_ioremap(
+			M1851_RAMOOPS_CONSOLE_PHYS, M1851_EARLY_RAMOOPS_SIZE);
+		if (m1851_early_ramoops)
+			pr_emerg("cannot expand persistent console: %ld; using 256 KiB\n",
+				 PTR_ERR(prz));
+		else
+			pr_emerg("persistent console remap failed after expansion error %ld\n",
+				 PTR_ERR(prz));
+		return;
+	}
+
+	/* persistent_ram_new() snapshots existing bytes; the active ring remains. */
+	persistent_ram_free_old(prz);
+	WRITE_ONCE(m1851_console_prz, prz);
+	/* Publish the full mapping before the next console write. */
+	wmb();
+	pr_emerg("persistent console expanded to 2 MiB; initcall tracing enabled\n");
 }
 
 void __init m1851_boot_timeout_start(void)
@@ -213,9 +272,15 @@ static u64 m1851_boot_timeout_next_interval_ns(void)
 			 m1851_boot_timeout_frequency);
 }
 
+static void m1851_boot_timeout_dump_cpu(void *unused)
+{
+	dump_stack();
+}
+
 static enum hrtimer_restart
 m1851_boot_timeout_expired(struct hrtimer *timer)
 {
+	u64 elapsed_seconds;
 	u64 next_interval_ns;
 
 	if (atomic_read(&m1851_boot_timeout_state) !=
@@ -228,6 +293,17 @@ m1851_boot_timeout_expired(struct hrtimer *timer)
 					  M1851_WDT_RST);
 		/* Make the pet visible before scheduling the next heartbeat. */
 		wmb();
+		elapsed_seconds = div64_u64(m1851_boot_timeout_elapsed_cycles(),
+					    m1851_boot_timeout_frequency);
+		pr_emerg("boot still stalled after %llu seconds\n",
+			 elapsed_seconds);
+		if (!m1851_boot_backtrace_dumped && elapsed_seconds >= 60) {
+			m1851_boot_backtrace_dumped = true;
+			pr_emerg("dumping all reachable CPU stacks\n");
+			smp_call_function(m1851_boot_timeout_dump_cpu, NULL, false);
+			dump_stack();
+			show_state_filter(TASK_UNINTERRUPTIBLE);
+		}
 		next_interval_ns = m1851_boot_timeout_next_interval_ns();
 		hrtimer_forward_now(timer, ns_to_ktime(next_interval_ns));
 		return HRTIMER_RESTART;
@@ -259,6 +335,8 @@ void __init m1851_boot_timeout_init_timer(void)
 	    M1851_BOOT_TIMEOUT_ARMED)
 		return;
 
+	m1851_early_console_expand();
+
 	m1851_boot_timeout_wdt_base = ioremap(M1851_WDT_PHYS_BASE,
 					      M1851_WDT_SIZE);
 	if (!m1851_boot_timeout_wdt_base)
@@ -279,25 +357,9 @@ void __init m1851_boot_timeout_init_timer(void)
 	hrtimer_start(&m1851_boot_timeout_timer, ns_to_ktime(first_ns),
 		      HRTIMER_MODE_REL);
 	pr_info("120-second restart armed with %llu ms remaining\n",
-		div_u64(remaining_cycles * NSEC_PER_SEC,
-			m1851_boot_timeout_frequency * NSEC_PER_MSEC));
+		div64_u64(remaining_cycles * NSEC_PER_SEC,
+			  m1851_boot_timeout_frequency * NSEC_PER_MSEC));
 }
-
-static int __init m1851_early_console_handoff(void)
-{
-	if (!m1851_early_console_registered)
-		return 0;
-
-	unregister_console(&m1851_early_console);
-	m1851_early_console_registered = false;
-	/* Drain device writes before removing the temporary mapping. */
-	mb();
-	early_iounmap(m1851_early_ramoops, M1851_EARLY_RAMOOPS_SIZE);
-	m1851_early_ramoops = NULL;
-
-	return 0;
-}
-arch_initcall_sync(m1851_early_console_handoff);
 
 void m1851_boot_timeout_disarm(void)
 {
