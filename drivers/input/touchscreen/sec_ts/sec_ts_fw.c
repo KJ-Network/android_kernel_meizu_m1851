@@ -107,10 +107,10 @@ int sec_ts_check_firmware_version(struct sec_ts_data *ts, const u8 *fw_info) {
 	ts->plat_data->img_version_of_ic[2] = fw_ver[2];
 	ts->plat_data->img_version_of_ic[3] = fw_ver[3];
 
-	ts->plat_data->img_version_of_bin[0] = (fw_hd->version && 0xFF);
-	ts->plat_data->img_version_of_bin[1] = (fw_hd->version >> 8 && 0xFF);
-	ts->plat_data->img_version_of_bin[2] = (fw_hd->version >> 16 && 0xFF);
-	ts->plat_data->img_version_of_bin[3] = (fw_hd->version >> 24 && 0xFF);
+	ts->plat_data->img_version_of_bin[0] = (fw_hd->version & 0xFF);
+	ts->plat_data->img_version_of_bin[1] = (fw_hd->version >> 8 & 0xFF);
+	ts->plat_data->img_version_of_bin[2] = (fw_hd->version >> 16 & 0xFF);
+	ts->plat_data->img_version_of_bin[3] = (fw_hd->version >> 24 & 0xFF);
 
 	input_info(true, &ts->client->dev,
 						 "%s: [FW] IMG version : %x.%x. [IC] IMG version %x.%x.\n",
@@ -593,7 +593,7 @@ static int sec_ts_firmware_update(struct sec_ts_data *ts, const u8 *data,
 		return -1;
 	}
 
-	num_chunk = fw_hd->NumberOfChunk[0] && 0xFF;
+	num_chunk = fw_hd->NumberOfChunk[0] & 0xFF;
 	input_info(true, &ts->client->dev, "%s: num_chunk : %d\n", __func__,
 						 num_chunk);
 	input_info(true, &ts->client->dev, "%s: 0x%08X, 0x%08X, 0x%zu, 0x%08X\n",

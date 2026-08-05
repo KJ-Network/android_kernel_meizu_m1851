@@ -24,7 +24,7 @@
 #include <linux/platform_device.h>
 #include <linux/regulator/consumer.h>
 #include <linux/slab.h>
-#include <linux/wakelock.h>
+#include <linux/pm_wakeup.h>
 
 #ifdef SAMSUNG_PROJECT
 #include <linux/sec_sysfs.h>
@@ -94,7 +94,7 @@ const uint16_t wakeup_gesture_key[] = {
 #define GESTURE_SLIDE_RIGHT 12
 #define GESTURE_SLIDE_LEFT 13
 
-static struct wake_lock gesture_wakelock;
+static struct wakeup_source *gesture_wakelock;
 #endif
 
 static struct device *sec_ts_dev;
@@ -914,7 +914,7 @@ static irqreturn_t sec_ts_irq_thread(int irq, void *ptr) {
 
 #ifdef SEC_TS_WAKEUP_GESTURE
 	if (ts->lowpower_mode)
-		wake_lock_timeout(&gesture_wakelock, msecs_to_jiffies(5000));
+		__pm_wakeup_event(gesture_wakelock, msecs_to_jiffies(5000));
 #endif
 	sec_ts_read_event(ts);
 
@@ -1722,7 +1722,7 @@ static int sec_ts_probe(struct i2c_client *client,
 
 	input_set_capability(ts->input_dev, EV_KEY, KEY_POWER);
 	mz_gesture_handle_register(handle_sec);
-	wake_lock_init(&gesture_wakelock, WAKE_LOCK_SUSPEND, "poll-wake-lock");
+	gesture_wakelock = wakeup_source_register(NULL, "poll-wake-lock");
 #endif
 	input_set_drvdata(ts->input_dev, ts);
 	i2c_set_clientdata(client, ts);

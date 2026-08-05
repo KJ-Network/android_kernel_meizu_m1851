@@ -10,7 +10,7 @@
  * published by the Free Software Foundation.
  */
 
-#include <asm/uaccess.h>
+#include <linux/uaccess.h>
 #include <linux/delay.h>
 #include <linux/delay.h>
 #include <linux/delay.h>
@@ -29,7 +29,7 @@
 #include <linux/seq_file.h>
 #include <linux/slab.h>
 #include <linux/slab.h>
-#include <linux/wakelock.h>
+#include <linux/pm_wakeup.h>
 
 #ifdef SAMSUNG_PROJECT
 #include <linux/sec_sysfs.h>

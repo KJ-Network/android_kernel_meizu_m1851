@@ -945,7 +945,7 @@ static void sec_ts_read_event(struct sec_ts_data *ts)
 
 	if (ts->power_status == SEC_TS_STATE_LPM) {
 
-		wake_lock_timeout(&ts->wakelock, msecs_to_jiffies(3 * MSEC_PER_SEC));
+		__pm_wakeup_event(ts->wakelock, msecs_to_jiffies(3 * MSEC_PER_SEC));
 		/* waiting for blsp block resuming, if not occurs i2c error */
 		ret = wait_for_completion_interruptible_timeout(&ts->resume_done, msecs_to_jiffies(3 * MSEC_PER_SEC));
 		if (ret == 0) {
@@ -2189,7 +2189,7 @@ static int sec_ts_probe(struct i2c_client *client, const struct i2c_device_id *i
 	mutex_init(&ts->eventlock);
 	mutex_init(&ts->modechange);
 
-	wake_lock_init(&ts->wakelock, WAKE_LOCK_SUSPEND, "tsp_wakelock");
+	ts->wakelock = wakeup_source_register(NULL, "tsp_wakelock");
 	init_completion(&ts->resume_done);
 	complete_all(&ts->resume_done);
 
@@ -2399,7 +2399,7 @@ err_input_register_device:
 	kfree(ts->pFrame);
 err_allocate_frame:
 err_init:
-	wake_lock_destroy(&ts->wakelock);
+	wakeup_source_unregister(ts->wakelock);
 	sec_ts_power(ts, false);
 	if (ts->plat_data->support_dex) {
 		if (ts->input_dev_pad)
@@ -2839,7 +2839,7 @@ static int sec_ts_remove(struct i2c_client *client)
 	p_ghost_check = NULL;
 #endif
 	device_init_wakeup(&client->dev, false);
-	wake_lock_destroy(&ts->wakelock);
+	wakeup_source_unregister(ts->wakelock);
 
 	dev_set_drvdata(&ts->client->dev, NULL);
 
