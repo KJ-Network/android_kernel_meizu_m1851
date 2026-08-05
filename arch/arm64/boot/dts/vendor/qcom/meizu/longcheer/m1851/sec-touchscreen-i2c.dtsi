@@ -12,98 +12,20 @@
  */
 
 &i2c_4 {
-    compatible = "qcom,i2c-msm-v2";
-	reg = <0xc178000 0x600>;
-	reg-names = "qup_phys_addr";
-	interrupt-names = "qup_irq";
-	interrupts = <0x00 0x62 0x00>;
-	dmas = <0x17a 0x0a 0x40 0x20000020 0x20 0x17a 0x0b 0x20 0x20000020 0x20>;
-	dma-names = "tx", "rx";
-	qcom,master-id = <0x56>;
-	qcom,clk-freq-out = <0x186a0>;
-	qcom,clk-freq-in = <0x124f800>;
-	clock-names = "iface_clk", "core_clk";
-	clocks = <0xa0 0x23 0xa0 0x2a>;
-	qcom,i2c-dat = <0x80 0x0e 0x00>;
-	qcom,i2c-clk = <0x80 0x0f 0x00>;
-	pinctrl-names = "i2c_active", "i2c_sleep", "i2c_bitbang";
-	pinctrl-0 = <0x184>;
-	pinctrl-1 = <0x185>;
-	pinctrl-2 = <0x186>;
 	status = "okay";
 
-    sec_touchscreen@48 {
-        compatible = "sec,sec_ts";
-        reg = <0x48>;
-        status = "ok";
-        interrupt-parent = <&tlmm>;
-        sec,irq_gpio = <&tlmm 67 0x2008>;
-        pinctrl-names = "on_state", "off_state";
-        pinctrl-0 = <&ts_active>;
-        pinctrl-1 = <&ts_int_suspend>;
-        sec,max_coords = <0x438 0x870>;
-        sec,num_lines = <0x12 0x20>;
-    };
-};
+	sec_ts: sec_touchscreen@48 {
+		compatible = "sec,sec_ts";
+		reg = <0x48>;
+		status = "okay";
 
-&tlmm {
-    i2c_4_active {
-        mux {
-            pins = "gpio14", "gpio15";
-            function = "blsp_i2c4";
-        };
-        config {
-            pins = "gpio14", "gpio15";
-            drive-strength = <0x02>;
-            bias-disable;
-        };
-    };
+		sec,irq_gpio = <&tlmm 67 0x2008>;
 
-    i2c_4_sleep {
-        mux {
-            pins = "gpio14", "gpio15";
-            function = "blsp_i2c4";
-        };
-        config {
-            pins = "gpio14", "gpio15";
-            drive-strength = <0x02>;
-            bias-pull-up;
-        };
-    };
+		pinctrl-names = "on_state", "off_state";
+		pinctrl-0 = <&ts_active>;
+		pinctrl-1 = <&ts_int_suspend>;
 
-    i2c_4_bitbang {
-        mux {
-            pins = "gpio14", "gpio15";
-            function = "gpio";
-        };
-        config {
-            pins = "gpio14", "gpio15";
-            drive-strength = <0x02>;
-            bias-pull-up;
-        };
-    };
-
-    ts_active {
-        mux {
-            pins = "gpio66", "gpio67";
-            function = "gpio";
-        };
-        config {
-            pins = "gpio66", "gpio67";
-            drive-strength = <0x10>;
-            bias-pull-up;
-        };
-    };
-
-    ts_int_suspend {
-        mux {
-            pins = "gpio67";
-            function = "gpio";
-        };
-        config {
-            pins = "gpio67";
-            drive-strength = <0x02>;
-            bias-disable;
-        };
-    };
+		sec,max_coords = <1080 2160>;
+		sec,num_lines = <18 32>;
+	};
 };
