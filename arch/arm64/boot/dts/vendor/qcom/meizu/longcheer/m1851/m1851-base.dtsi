@@ -11,7 +11,7 @@
  */
 
 #include "m1851-camera-sensor-mtp.dtsi"
-#include "focaltech-ft8719-i2c.dtsi"
+#include "sec-touchscreen-i2c.dtsi"
 
 /* msm-pm660.dtsi m1851 specific diff */
 &pm660_charger {
