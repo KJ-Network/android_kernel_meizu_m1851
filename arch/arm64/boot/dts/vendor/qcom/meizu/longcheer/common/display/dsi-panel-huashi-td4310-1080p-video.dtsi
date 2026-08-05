@@ -12,6 +12,7 @@
 
 &mdss_mdp {
 	dsi_td4310_huashi_fhd_video: qcom,mdss_dsi_td4310_huashi_fhd_video {
+		qcom,mdss-dsi-panel-controller = <&mdss_dsi0>;
 		qcom,mdss-dsi-panel-name = "td4310 huashi fhd video mode dsi panel";
 		qcom,mdss-dsi-panel-type = "dsi_video_mode";
 		qcom,mdss-dsi-panel-framerate = <0x3c>;

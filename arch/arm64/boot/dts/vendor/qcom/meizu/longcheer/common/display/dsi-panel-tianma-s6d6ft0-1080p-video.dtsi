@@ -12,6 +12,7 @@
 
 &mdss_mdp {
 	dsi_s6d6ft0_tianma_fhd_video: qcom,mdss_dsi_s6d6ft0_tianma_fhd_video {
+		qcom,mdss-dsi-panel-controller = <&mdss_dsi0>;
 		qcom,mdss-dsi-panel-name = "s6d6ff0 tianma fhd video mode dsi panel";
 		qcom,mdss-dsi-panel-type = "dsi_video_mode";
 		qcom,mdss-dsi-panel-framerate = <0x3c>;
