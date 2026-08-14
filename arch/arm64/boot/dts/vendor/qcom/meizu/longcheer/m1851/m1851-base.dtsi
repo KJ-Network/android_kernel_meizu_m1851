@@ -62,4 +62,24 @@
 			regulator-always-on;
 		};
 	};
-}; 
+};
+
+/* Fingerprint sensor wiring. */
+&soc {
+	/delete-node/ goodix_fp;
+	/delete-node/ fpc1020;
+
+	goodix_fp {
+		status = "okay";
+		compatible = "goodix,fingerprint";
+		interrupt-parent = <&tlmm>;
+		interrupts = <72 0>;
+		goodix,gpio_irq = <&tlmm 72 0>;
+		goodix,gpio_reset = <&tlmm 20 0>;
+		finger,gpio_id = <&tlmm 21 0>;
+		vdd_fp-supply = <&pm660l_l6>;
+		clock-names = "iface_clk", "core_clk";
+		clocks = <&clock_gcc GCC_BLSP1_AHB_CLK>,
+			<&clock_gcc GCC_BLSP1_QUP3_SPI_APPS_CLK>;
+	};
+};
