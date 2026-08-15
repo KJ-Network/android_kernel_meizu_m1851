@@ -6,5 +6,6 @@ config INPUT_FINGERPRINT
 if INPUT_FINGERPRINT
     menu "Fingerprint sensors"
         source "drivers/input/fingerprint/goodix/Kconfig"
+        source "drivers/input/fingerprint/et512/Kconfig"
     endmenu
 endif

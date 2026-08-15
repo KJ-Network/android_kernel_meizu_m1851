@@ -1,0 +1,9 @@
+config FINGERPRINT_ET512
+	tristate "Egis ET512 fingerprint sensor"
+	depends on OF && GPIOLIB
+	help
+	  Say Y here to enable support for the Egis ET512 fingerprint
+	  sensor. The driver provides the esfp0 character device and the
+	  navigation input interface used by the fingerprint service. It
+	  also handles sensor reset and interrupt notification through the
+	  platform GPIOs described by the device tree.
