@@ -25,6 +25,8 @@ config INPUT
 
 if INPUT
 
+source "drivers/input/fingerprint/Kconfig"
+
 config INPUT_LEDS
 	tristate "Export input device LEDs in sysfs"
 	depends on LEDS_CLASS
@@ -224,4 +226,3 @@ source "drivers/input/gameport/Kconfig"
 endmenu
 
 endmenu
-
