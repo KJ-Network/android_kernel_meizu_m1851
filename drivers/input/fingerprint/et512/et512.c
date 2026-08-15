@@ -18,6 +18,7 @@
 #include <linux/slab.h>
 #include <linux/sysfs.h>
 #include <linux/uaccess.h>
+#include <linux/fingerprint_id.h>
 
 #include "et512.h"
 
@@ -350,46 +351,6 @@ static const struct attribute_group et512_attribute_group = {
 	.attrs = et512_attributes,
 };
 
-static int et512_enable_supply(struct et512_data *data)
-{
-	int error;
-
-	data->vdd = devm_regulator_get_optional(&data->pdev->dev, "vdd_fp");
-	if (IS_ERR(data->vdd)) {
-		error = PTR_ERR(data->vdd);
-		data->vdd = NULL;
-		return error == -ENODEV ? 0 : error;
-	}
-	if (regulator_count_voltages(data->vdd) > 0) {
-		error = regulator_set_voltage(data->vdd, 2850000, 2850000);
-		if (error)
-			return error;
-	}
-	error = regulator_enable(data->vdd);
-	if (!error)
-		data->vdd_enabled = true;
-	return error;
-}
-
-static int et512_check_sensor_id(struct et512_data *data)
-{
-	struct device *dev = &data->pdev->dev;
-	int error;
-
-	data->id_gpio = of_get_named_gpio(dev->of_node, "finger,gpio_id", 0);
-	if (!gpio_is_valid(data->id_gpio))
-		return data->id_gpio == -ENOENT ? 0 : data->id_gpio;
-	error = devm_gpio_request_one(dev, data->id_gpio, GPIOF_IN,
-				      "finger_id");
-	if (error)
-		return error;
-	if (!gpio_get_value(data->id_gpio)) {
-		dev_info(dev, "Goodix sensor ID, skipping ET512\n");
-		return -ENODEV;
-	}
-	return 0;
-}
-
 static int et512_parse_dt(struct et512_data *data)
 {
 	struct device *dev = &data->pdev->dev;
@@ -459,6 +420,10 @@ static int et512_probe(struct platform_device *pdev)
 	struct et512_data *data;
 	int error;
 
+	error = fingerprint_id_match(&pdev->dev, FINGERPRINT_ID_ET512);
+	if (error)
+		return error;
+
 	mutex_lock(&et512_device_lock);
 	if (et512_device) {
 		mutex_unlock(&et512_device_lock);
@@ -474,18 +439,12 @@ static int et512_probe(struct platform_device *pdev)
 	init_waitqueue_head(&data->irq_waitq);
 	setup_timer(&data->irq_timer, et512_irq_timer, (unsigned long)data);
 
-	error = et512_enable_supply(data);
-	if (error)
-		goto err_free;
-	error = et512_check_sensor_id(data);
-	if (error)
-		goto err_supply;
 	error = et512_parse_dt(data);
 	if (error)
-		goto err_supply;
+		goto err_free;
 	error = et512_create_chardev(data);
 	if (error)
-		goto err_supply;
+		goto err_free;
 	data->wakeup = wakeup_source_register("et512_wake_lock");
 	if (!data->wakeup) {
 		error = -ENOMEM;
@@ -513,9 +472,6 @@ err_wakeup:
 	data->wakeup = NULL;
 err_chardev:
 	et512_destroy_chardev(data);
-err_supply:
-	if (data->vdd_enabled)
-		regulator_disable(data->vdd);
 err_free:
 	kfree(data);
 	return error;
@@ -544,8 +500,6 @@ static int et512_remove(struct platform_device *pdev)
 	mutex_unlock(&data->irq_lock);
 	if (data->wakeup)
 		wakeup_source_unregister(data->wakeup);
-	if (data->vdd_enabled)
-		regulator_disable(data->vdd);
 	et512_destroy_chardev(data);
 	platform_set_drvdata(pdev, NULL);
 	free_data = !data->users;

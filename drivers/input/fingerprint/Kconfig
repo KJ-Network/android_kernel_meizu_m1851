@@ -5,6 +5,13 @@ config INPUT_FINGERPRINT
 
 if INPUT_FINGERPRINT
     menu "Fingerprint sensors"
+config FINGERPRINT_ID
+	bool "Fingerprint sensor selector"
+	depends on OF && GPIOLIB
+	help
+	  Selects the Goodix or ET512 sensor using the board fingerprint ID
+	  GPIO and keeps the shared selector GPIO owned by one driver.
+
         source "drivers/input/fingerprint/goodix/Kconfig"
         source "drivers/input/fingerprint/et512/Kconfig"
     endmenu

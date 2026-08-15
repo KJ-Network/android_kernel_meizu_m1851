@@ -1,6 +1,7 @@
 config FINGERPRINT_ET512
 	tristate "Egis ET512 fingerprint sensor"
 	depends on OF && GPIOLIB
+	select FINGERPRINT_ID
 	help
 	  Say Y here to enable support for the Egis ET512 fingerprint
 	  sensor. The driver provides the esfp0 character device and the

@@ -17,6 +17,7 @@
 #include <linux/compat.h>
 #include <linux/cdev.h>
 #include <linux/delay.h>
+#include <linux/fingerprint_id.h>
 #include <linux/fb.h>
 #include <linux/fs.h>
 #include <linux/input.h>
@@ -249,6 +250,9 @@ static int gf_probe(struct platform_device *pdev)
 	struct gf_device *data;
 	int ret;
 
+	ret = fingerprint_id_match(&pdev->dev, FINGERPRINT_ID_GOODIX);
+	if (ret)
+		return ret;
 	if (gf_data)
 		return -EBUSY;
 	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);

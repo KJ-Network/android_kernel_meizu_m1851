@@ -1,4 +1,7 @@
 config FINGERPRINT_GOODIX
 	tristate "Goodix fingerprint support"
+	select FINGERPRINT_ID
 	help
-	  Say Y here to enable Goodix fingerprint driver support.
+	  Say Y here to enable the Goodix TEE fingerprint sensor driver.
+	  The driver exposes the character device, input events, display state
+	  notifications and the netlink interface used by the fingerprint HAL.

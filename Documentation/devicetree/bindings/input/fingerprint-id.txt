@@ -1,0 +1,17 @@
+Fingerprint sensor ID selector
+
+The selector supplies power to the fingerprint sensor and samples an ID GPIO
+to select the sensor driver used on boards populated with one of two sensors.
+
+Required properties:
+- compatible: must be "wind,fp_id"
+- finger,gpio_id: GPIO specifier for the sensor ID input
+- vdd_fp-supply: phandle to the fingerprint sensor power regulator
+
+Example:
+
+	fp_id {
+		compatible = "wind,fp_id";
+		finger,gpio_id = <&tlmm 21 0>;
+		vdd_fp-supply = <&pmic_l6>;
+	};

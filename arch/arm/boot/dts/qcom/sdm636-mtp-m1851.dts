@@ -11920,8 +11920,6 @@
 			interrupts = <0x48 0x00>;
 			goodix,gpio_irq = <0xc5 0x48 0x00>;
 			goodix,gpio_reset = <0xc5 0x14 0x00>;
-			finger,gpio_id = <0xc5 0x15 0x00>;
-			vdd_fp-supply = <0x190>;
 			clock-names = "iface_clk", "core_clk";
 			clocks = <0xa0 0x23 0xa0 0x29>;
 		};
@@ -11933,10 +11931,16 @@
 			interrupts = <0x48 0x00>;
 			egistec,gpio_irq = <0xc5 0x48 0x00>;
 			egistec,gpio_rst = <0xc5 0x14 0x00>;
-			finger,gpio_id = <0xc5 0x15 0x00>;
-			vdd_fp-supply = <0x190>;
 			clock-names = "iface_clk", "core_clk";
 			clocks = <0xa0 0x23 0xa0 0x29>;
+		};
+
+		fp_id {
+			status = "okay";
+			compatible = "wind,fp_id";
+			interrupt-parent = <0xc5>;
+			finger,gpio_id = <0xc5 0x15 0x00>;
+			vdd_fp-supply = <0x190>;
 		};
 
 		uart@c16f000 {

@@ -16,7 +16,6 @@
 #include <linux/notifier.h>
 #include <linux/platform_device.h>
 #include <linux/pm_wakeup.h>
-#include <linux/regulator/consumer.h>
 #include <linux/timer.h>
 #include <linux/wait.h>
 
@@ -50,7 +49,6 @@ struct et512_data {
 	struct input_dev *input;
 	struct task_struct *nav_thread;
 	struct wakeup_source *wakeup;
-	struct regulator *vdd;
 	struct timer_list irq_timer;
 	struct timer_list nav_timer;
 	wait_queue_head_t irq_waitq;
@@ -60,7 +58,6 @@ struct et512_data {
 	struct mutex nav_lock; /* protects the navigation command queue */
 	int reset_gpio;
 	int irq_gpio;
-	int id_gpio;
 	int irq;
 	int detect_period;
 	int detect_threshold;
@@ -68,7 +65,6 @@ struct et512_data {
 	unsigned int users;
 	u8 *buffer;
 	bool present;
-	bool vdd_enabled;
 	bool irq_requested;
 	bool irq_enabled;
 	bool irq_wake_enabled;
