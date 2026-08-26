@@ -9213,6 +9213,22 @@
 				};
 			};
 
+			hall_int {
+				linux,phandle = <0x2a0>;
+				phandle = <0x2a0>;
+
+				mux {
+					pins = "gpio75";
+					function = "gpio";
+				};
+
+				config {
+					pins = "gpio75";
+					drive-strength = <0x02>;
+					bias-pull-up;
+				};
+			};
+
 			trigout_a {
 				linux,phandle = <0x4d>;
 				phandle = <0x4d>;
@@ -11922,6 +11938,14 @@
 			goodix,gpio_reset = <0xc5 0x14 0x00>;
 			clock-names = "iface_clk", "core_clk";
 			clocks = <0xa0 0x23 0xa0 0x29>;
+		};
+
+		wind,bu5203nvx_hall@0 {
+			compatible = "wind,bu5203nvx_hall";
+			irq_gpio = <0x80 0x4b 0x2008>;
+			pinctrl-names = "default";
+			pinctrl-0 = <0x2a0>;
+			status = "okay";
 		};
 
 		egistec_fp {
